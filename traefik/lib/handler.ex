@@ -13,7 +13,7 @@ defmodule Traefik.Handler do
       |> List.first() 
       |> String.split(" ")
 
-    %{method: method, path: path,  response: ""}
+    %{method: method, path: path,  response: "", status: nil}
   end
 
 
@@ -62,14 +62,14 @@ Accept: */*
 IO.puts(Traefik.Handler.handle(request_2))
 
 
-#request_3 = """
-#GET /hello/1 HTTP/1.1
-#Host: makingdevs.com
-#User-Agent: Mybrowser/0.1
-#Accept: */*
+request_3 = """
+GET /hello/1 HTTP/1.1
+Host: makingdevs.com
+User-Agent: Mybrowser/0.1
+Accept: */*
 
-#"""
-#IO.puts(Traefik.Handler.handle(request_3))
+"""
+IO.puts(Traefik.Handler.handle(request_3))
 
 request_4 = """
 GET /bugme HTTP/1.1

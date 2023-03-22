@@ -22,16 +22,27 @@ defmodule Traefik.Handler do
   end
 
   def route(conn, "GET", "/hello") do
-    %{conn | response: "Hello person"}
+    %{conn | status: 200, response: "Hello person"}
   end
 
-  def route(conn, "GET", "/developers"  ) do
-    %{conn | response: "Hello Making Devs "}
+  def route(conn, "GET", "/hello/" <> id) do
+    %{conn | status: 200, response: "Hello person #{id}"}
   end
+
+
+  def route(conn, "GET", "/developers"  ) do
+    %{conn | status: 200, response: "Hello Making Devs "}
+  end
+
+  def route(conn, _, path  ) do
+    %{conn | status: 404,response: "No #{path} found"}
+  end
+
+
 
   def format_response(conn) do
     """
-    HTTP/1.1 200 OK 
+    HTTP/1.1 #{conn.status} OK  
     Content-Type: text/html
     Content-Length: #{String.length(conn.response)}
 

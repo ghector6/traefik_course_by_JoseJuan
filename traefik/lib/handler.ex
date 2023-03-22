@@ -1,34 +1,32 @@
 defmodule Traefik.Handler do 
   def handle(request) do
-    "Hola mundo #{request}"
     request
     |> parse()
     |> route()
     |> format_response
   end
 
-  def parse(_request) do
+  def parse(request) do
     [method, path, _] = 
-    request 
-    |> String.split("\n") 
-    |> List.first() 
-    |>String.split(" ")
+      request 
+      |> String.split("\n") 
+      |> List.first() 
+      |> String.split(" ")
 
-    %{method: "GET", path: "/developers", response: "Hello Devs"}
+    %{method: "GET", path: path,  response: "Hello Devs"}
   end
 
-  def route(_conn) do
-    _conn = %{method: "GET", path: "/", response: "Hello Devs"}
+  def route(conn) do
+    %{conn | response: "Hello MakingDevs"}
   end
 
-  def format_response(_conn) do
+  def format_response(conn) do
     """
     HTTP/1.1 200 OK
     Content-Type: text/html
-    Content-Length: 14
+    Content-Length: #{String.length(conn.response)}
 
-    Hello Devs
-    
+    #{conn.response} 
 
     @hgector6, @makingdevs, @eln
     """
@@ -36,7 +34,7 @@ defmodule Traefik.Handler do
 end
 
 request = """
-GET / developers HTTP/1.1
+GET /developers HTTP/1.1
 Host: makingdevs.com
 User-Agent: Mybrowser/0.1
 Accept: */*

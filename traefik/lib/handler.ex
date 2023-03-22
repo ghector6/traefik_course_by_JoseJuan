@@ -3,7 +3,7 @@ defmodule Traefik.Handler do
     request
     |> parse()
     |> route()
-    |> format_response
+    |> format_response()
   end
 
   def parse(request) do
@@ -13,12 +13,22 @@ defmodule Traefik.Handler do
       |> List.first() 
       |> String.split(" ")
 
-    %{method: "GET", path: path,  response: "Hello Devs"}
+    %{method: method, path: path,  response: "Hello Devs"}
   end
 
   def route(conn) do
-    %{conn | response: "Hello MakingDevs"}
+    route(conn, conn.method, conn.path)
   end
+
+  def route(conn, "GET", "/hello") do
+    %{conn | response: "Hello World"}
+  end
+
+  def route(conn, "GET", "/developers") do
+    %{conn | response: "Hello Making Devs!!🤓"}
+  end
+
+
 
   def format_response(conn) do
     """
@@ -28,17 +38,26 @@ defmodule Traefik.Handler do
 
     #{conn.response} 
 
-    @hgector6, @makingdevs, @eln
+    @ghector6, @makingdevs, @eln
     """
   end
 end
 
-request = """
+request_1 = """
+GET /hello HTTP/1.1
+Host: makingdevs.com
+User-Agent: Mybrowser/0.1
+Accept: */*
+
+"""
+request_2 = """
 GET /developers HTTP/1.1
 Host: makingdevs.com
 User-Agent: Mybrowser/0.1
 Accept: */*
 
 """
-response =  Traefik.Handler.handle(request)
-IO.puts(response)
+IO.puts(Traefik.Handler.handle(request_1))
+IO.puts("#####################")
+IO.puts(Traefik.Handler.handle(request_2))
+

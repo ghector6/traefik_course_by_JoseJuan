@@ -16,7 +16,6 @@ defmodule Traefik.Handler do
     %{method: method, path: path,  response: "", status: nil}
   end
 
-
   def route(conn) do
     route(conn, conn.method, conn.path)
   end
@@ -29,20 +28,17 @@ defmodule Traefik.Handler do
     %{conn | status: 200, response: "Hello person #{id}"}
   end
 
-
   def route(conn, "GET", "/developers"  ) do
     %{conn | status: 200, response: "Hello Making Devs "}
   end
 
   def route(conn, _, path  ) do
-    %{conn | status: 404,response: "No #{path} found"}
+    %{conn | status: 404, response: "No #{path} found"}
   end
-
-
 
   def format_response(conn) do
     """
-    HTTP/1.1 #{conn.status} OK  
+    HTTP/1.1 #{conn.status} #{code_status(conn.status)}  
     Content-Type: text/html
     Content-Length: #{String.length(conn.response)}
 
@@ -50,6 +46,17 @@ defmodule Traefik.Handler do
 
     @ghector6, @makingdevs, @eln
     """
+  end
+
+  defp code_status(code) do
+    %{
+      200 => "OK",
+      201 => "Created",
+      401 => "Unauthorized",
+      403 => "Forbidden",
+      404 => "Not Found",
+      500 => "Internal Server Error"
+    }[code]
   end
 end
 

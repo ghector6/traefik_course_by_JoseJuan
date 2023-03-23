@@ -2,6 +2,7 @@ defmodule Traefik.Handler do
   def handle(request) do
     request
     |> parse()
+    |> rewrite_path()
     |> log()
     |> route()
     |> format_response()
@@ -16,6 +17,12 @@ defmodule Traefik.Handler do
 
     %{method: method, path: path,  response: "", status: nil}
   end
+
+  def rewrite_path(%{path: "/internal-projects"} = conn) do
+    %{conn | path: "/secret-projects"}
+  end
+
+  def rewrite_path(conn), do: conn
 
   def log(conn), do: IO.inspect(conn, label: "LOG") 
 
@@ -33,6 +40,10 @@ defmodule Traefik.Handler do
 
   def route(conn, "GET", "/developers"  ) do
     %{conn | status: 200, response: "Hello Making Devs "}
+  end
+
+  def route(conn, "GET", "/secret-projects") do
+    %{conn | status: 200, response: "Learning OTP, LiveView"}
   end
 
   def route(conn, _, path  ) do
@@ -102,5 +113,11 @@ Accept: */*
 """
 IO.puts(Traefik.Handler.handle(request_4))
 
+request_5 = """
+GET /internal-projects HTTP/1.1
+Host: makingdevs.com
+User-Agent: Mybrowser/0.1
+Accept: */*
 
-
+"""
+IO.puts(Traefik.Handler.handle(request_5))

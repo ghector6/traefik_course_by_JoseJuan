@@ -56,7 +56,8 @@ defmodule Traefik.Handler do
       403 => "Forbidden",
       404 => "Not Found",
       500 => "Internal Server Error"
-    }[code]
+    }
+    |> Map.get(code, "Not Found")
   end
 end
 

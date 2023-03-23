@@ -58,6 +58,23 @@ defmodule Traefik.Handler do
     %{conn | status: 404, response: "No #{path} found"}
   end
 
+  def route(conn, "GET", "/about") do 
+    file_path = 
+      Path.expand("../../pages", __DIR__)
+      |> Path.join("about.html")
+
+    case File.read(file_path) do
+      {:ok, content} ->
+        %{conn | status: 200, response: content}
+
+      {:error, :enoent} ->
+        %{conn | status: 404, response: "File not found!"}
+
+      {:error, reason} ->
+        %{conn | status: 500, response: " File error: #{reason}"}
+    end
+  end
+
   def format_response(conn) do
     """
     HTTP/1.1 #{conn.status} #{code_status(conn.status)}  
@@ -129,3 +146,12 @@ Accept: */*
 
 """
 IO.puts(Traefik.Handler.handle(request_5))
+
+request_6 = """
+GET /about HTTP/1.1
+Host: makingdevs.com
+User-Agent: MyBrowser/0.1
+Accept: */*
+
+"""
+IO.puts(Traefik.Handler.handle(request_6))

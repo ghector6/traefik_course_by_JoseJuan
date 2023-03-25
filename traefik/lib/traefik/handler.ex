@@ -1,4 +1,4 @@
-defmodule Traefik.Handler do 
+defmodule Traefik.Handler do
   @moduledoc """
   Handles the request in Traefik WebServer in a simple way.
   """
@@ -67,8 +67,8 @@ defmodule Traefik.Handler do
 
 
 
-#  def route(conn, "GET", "/about") do 
-#    file_path = 
+#  def route(conn, "GET", "/about") do
+#    file_path =
 #      Path.expand("../../pages", __DIR__)
 #      |> Path.join("about.html")
 #
@@ -86,11 +86,11 @@ defmodule Traefik.Handler do
 
   def format_response(conn) do
     """
-    HTTP/1.1 #{conn.status} #{code_status(conn.status)}  
+    HTTP/1.1 #{conn.status} #{code_status(conn.status)}
     Content-Type: text/html
     Content-Length: #{String.length(conn.response)}
 
-    #{conn.response} 
+    #{conn.response}
 
     @ghector6, @makingdevs, @eln
     """

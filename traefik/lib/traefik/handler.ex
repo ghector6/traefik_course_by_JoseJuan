@@ -52,6 +52,10 @@ defmodule Traefik.Handler do
     |> handle_file(conn)
   end
 
+  def route(%Conn{}= conn, "POST", "/developers") do
+    %Conn{conn | status: 201, response: "Created Developer ‼️"}
+  end
+
   def route(%Conn{} =conn, _, path  ) do
     %Conn{conn | status: 404, response: "No #{path} found"}
   end
@@ -155,3 +159,15 @@ Accept: */*
 
 """
 IO.puts(Traefik.Handler.handle(request_6))
+
+request_7 = """
+POST /developers HTTP/1.1
+Host: makingdevs.com
+User-Agent: MyBrowser/0.1
+Accept: */*
+Content-Type: application/x-www-form-urlencoded
+Content-Length:
+name=Hector&lastname=Garcia&nickname=ghector6
+"""
+
+IO.puts(Traefik.Handler.handle(request_7))

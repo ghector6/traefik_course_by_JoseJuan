@@ -8,6 +8,8 @@ defmodule Traefik.Handler do
   import Traefik.Parser, only: [parse: 1]
   import Traefik.Plugs, only: [rewrite_path: 1, track: 1, log: 1]
 
+  alias Traefik.Conn
+
 
   @doc """
   Transforms the request into a response when it is called
@@ -18,51 +20,52 @@ defmodule Traefik.Handler do
     |> rewrite_path()
     |> log()
     |> route()
+    |> log()
     |> track()
     |> format_response()
   end
 
-  def route(conn) do
+  def route(%Conn{} = conn) do
     route(conn, conn.method, conn.path)
   end
 
-  def route(conn, "GET", "/hello") do
-    %{conn | status: 200, response: "Hello person"}
+  def route(%Conn{} =conn, "GET", "/hello") do
+    %Conn{conn | status: 200, response: "Hello person"}
   end
 
-  def route(conn, "GET", "/hello/" <> id) do
-    %{conn | status: 200, response: "Hello person #{id}"}
+  def route(%Conn{} =conn, "GET", "/hello/" <> id) do
+    %Conn{conn | status: 200, response: "Hello person #{id}"}
   end
 
-  def route(conn, "GET", "/developers"  ) do
-    %{conn | status: 200, response: "Hello Making Devs "}
+  def route(%Conn{} =conn, "GET", "/developers"  ) do
+    %Conn{conn | status: 200, response: "Hello Making Devs "}
   end
 
-  def route(conn, "GET", "/secret-projects") do
-    %{conn | status: 200, response: "Learning OTP, LiveView"}
+  def route(%Conn{} =conn, "GET", "/secret-projects") do
+    %Conn{conn | status: 200, response: "Learning OTP, LiveView"}
   end
 
-  def route(conn, "GET", "/about") do
+  def route(%Conn{} =conn, "GET", "/about") do
     @pages_path
     |> Path.join("about.html")
     |> File.read()
     |> handle_file(conn)
   end
 
-  def route(conn, _, path  ) do
-    %{conn | status: 404, response: "No #{path} found"}
+  def route(%Conn{} =conn, _, path  ) do
+    %Conn{conn | status: 404, response: "No #{path} found"}
   end
 
-  def handle_file({:ok, content}, conn) do
-    %{conn | status: 200, response: content}
+  def handle_file({:ok, content}, %Conn{} = conn) do
+    %Conn{conn | status: 200, response: content}
   end
 
-  def handle_file({:error, :enoent}, conn) do
-    %{conn | status: 404, response: "File not Found!!"}
+  def handle_file({:error, :enoent}, %Conn{} = conn) do
+    %Conn{conn | status: 404, response: "File not Found!!"}
   end
 
-  def handle_file({:error, reason}, conn) do
-    %{conn | status: 500, response: "File error: #{reason}"}
+  def handle_file({:error, reason}, %Conn{} = conn) do
+    %Conn{conn | status: 500, response: "File error: #{reason}"}
   end
 
 
@@ -84,7 +87,7 @@ defmodule Traefik.Handler do
 #    end
 #  end
 
-  def format_response(conn) do
+  def format_response(%Conn{} = conn) do
     """
     HTTP/1.1 #{conn.status} #{code_status(conn.status)}
     Content-Type: text/html

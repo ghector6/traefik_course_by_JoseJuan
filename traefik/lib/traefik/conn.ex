@@ -1,3 +1,3 @@
-defmodule Traefik.conn do
+defmodule Traefik.Conn do
   defstruct method: "", path: "", status: nil, response: ""
 end

@@ -11,9 +11,7 @@ defmodule Traefik.Handler do
   alias Traefik.Conn
 
 
-  @doc """
-  Transforms the request into a response when it is called
-  """
+  @doc "Transforms the request into a response when it is called"
   def handle(request) do
     request
     |> parse()
@@ -29,34 +27,39 @@ defmodule Traefik.Handler do
     route(conn, conn.method, conn.path)
   end
 
-  def route(%Conn{} =conn, "GET", "/hello") do
+  def route(%Conn{} = conn, "GET", "/hello") do
     %Conn{conn | status: 200, response: "Hello person"}
   end
 
-  def route(%Conn{} =conn, "GET", "/hello/" <> id) do
+  def route(%Conn{} = conn, "GET", "/hello/" <> id) do
     %Conn{conn | status: 200, response: "Hello person #{id}"}
   end
 
-  def route(%Conn{} =conn, "GET", "/developers"  ) do
+  def route(%Conn{} = conn, "GET", "/developers"  ) do
     %Conn{conn | status: 200, response: "Hello Making Devs "}
   end
 
-  def route(%Conn{} =conn, "GET", "/secret-projects") do
+  def route(%Conn{} = conn, "GET", "/secret-projects") do
     %Conn{conn | status: 200, response: "Learning OTP, LiveView"}
   end
 
-  def route(%Conn{} =conn, "GET", "/about") do
+  def route(%Conn{} = conn, "GET", "/about") do
     @pages_path
     |> Path.join("about.html")
     |> File.read()
     |> handle_file(conn)
   end
 
-  def route(%Conn{}= conn, "POST", "/developers") do
-    %Conn{conn | status: 201, response: "Created Developer ‼️"}
+  def route(%Conn{} = conn, "POST", "/developers") do
+    response = """
+    Created dev:
+    #{conn.params["name"]} -#{conn.params["lastname"]} - #{conn.params["nickname"]}
+    """
+
+    %Conn{conn | status: 201, response: response}
   end
 
-  def route(%Conn{} =conn, _, path  ) do
+  def route(%Conn{} = conn, _, path  ) do
     %Conn{conn | status: 404, response: "No #{path} found"}
   end
 
@@ -166,7 +169,8 @@ Host: makingdevs.com
 User-Agent: MyBrowser/0.1
 Accept: */*
 Content-Type: application/x-www-form-urlencoded
-Content-Length:
+Content-Length: 66
+
 name=Hector&lastname=Garcia&nickname=ghector6
 """
 

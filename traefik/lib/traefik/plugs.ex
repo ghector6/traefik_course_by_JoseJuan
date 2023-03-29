@@ -1,7 +1,7 @@
 defmodule Traefik.Plugs do
   alias Traefik.Conn
   def rewrite_path(%Conn{path: "/internal-projects"} = conn) do
-    %{conn | path: "/secret-projects"}
+    %Conn{conn | path: "/secret-projects"}
   end
 
   def rewrite_path(%Conn{} = conn), do: conn

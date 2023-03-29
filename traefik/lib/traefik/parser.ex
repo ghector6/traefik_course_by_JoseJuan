@@ -6,16 +6,15 @@ defmodule Traefik.Parser do
 
     [method, path, _] = String.split(request_line, " ")
 
-    params = String.trim(params_string) |> URI.decode_query()
+    params = String.trim(param_string) |> URI.decode_query()
 
     %Traefik.Conn{
       method: method,
       path: path,
       response: "",
-      staus: nil,
+      status: nil,
       params: params
     }
 
-    %Traefik.Conn{method: method, path: path,  response: "", status: nil}
   end
 end

@@ -175,3 +175,30 @@ name=Hector&lastname=Garcia&email=hector@makingdevs.com
 """
 
 IO.puts(Traefik.Handler.handle(request_7))
+
+request_8 = """
+GET /makingdevs HTTP/1.1
+Host: makingdevs.com
+User-Agent: MyBrowser/0.1
+Accept: */*
+
+"""
+
+
+IO.puts(Traefik.Handler.handle(request_8))
+
+request_9 = """
+GET /makingdevs/3 HTTP/1.1
+Host: makingdevs.com
+User-Agent: MyBrowser/0.1
+Accept: */*
+
+"""
+
+
+IO.puts(Traefik.Handler.handle(request_9))
+
+
+
+
+

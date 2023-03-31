@@ -48,7 +48,7 @@ defmodule Traefik.Handler do
   end
 
   def route(%Conn{} = conn , "GET", "/makingdevs/" <> id ) do
-    params = conn.params |> Map.put("id" id)
+    params = conn.params |> Map.put("id", id)
     Traefik.DeveloperController.show(conn, params)
   end
 

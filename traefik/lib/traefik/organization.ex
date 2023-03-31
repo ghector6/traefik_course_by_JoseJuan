@@ -1,7 +1,7 @@
 defmodule Traefik.Organization do
   @csv_file Path.expand("../..", __DIR__)
 
-  def list_developer() do
+  def list_developers() do
     @csv_file
     |> Path.join("MOCK_DATA.csv")
     |> File.read!()

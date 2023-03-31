@@ -6,7 +6,7 @@ defmodule Traefik.DeveloperController do
     response =
       Traefik.Organization.list_developers()
       |> Enum.filter(&Developer.filter_male_female/1)
-      |> Enum.sort(&Developer.sort_by_lastname/2)
+      |> Enum.sort(&Developer.sort_by_last_name/2)
       |> Enum.take(10)
       |> Enum.map(&Developer.format_developer_item/1)
     %Conn{conn | status: 200, response: "<ul>#{response}</ul>"}

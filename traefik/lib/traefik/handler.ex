@@ -23,47 +23,43 @@ defmodule Traefik.Handler do
     |> format_response()
   end
 
-  def route(%Conn{} = conn) do
-    route(conn, conn.method, conn.path)
-  end
-
-  def route(%Conn{} = conn, "GET", "/hello") do
-    %Conn{conn | status: 200, response: "Hello person"}
-  end
-
-  def route(%Conn{} = conn, "GET", "/hello/" <> id) do
-    %Conn{conn | status: 200, response: "Hello person #{id}"}
-  end
-
-  def route(%Conn{} = conn, "GET", "/developers"  ) do
-    %Conn{conn | status: 200, response: "Hello Making Devs "}
-  end
-
-  def route(%Conn{} = conn, "GET", "/secret-projects") do
+  def route(%Conn{method: "GET", path: "/secret-projects"} = conn) do
     %Conn{conn | status: 200, response: "Learning OTP, LiveView"}
   end
 
-  def route(%Conn{} = conn, "GET", "/makingdevs") do
+  def route(%Conn{method: "GET", path: "/developers"} = conn) do
+    %Conn{conn | status: 200, response: "Hello person"}
+  end
+
+  def route(%Conn{method: "GET", path: "/developers/" <> id} = conn) do
+    %Conn{conn | status: 200, response: "Hello person #{id}"}
+  end
+
+  def route(%Conn{method: "GET", path: "/projects"} = conn) do
+    %Conn{conn | status: 200, response: "Traefik, Agora, Codebreaker"}
+  end
+
+  def route(%Conn{method: "GET", path: "/makingdevs"} = conn) do
     Traefik.DeveloperController.index(conn)
   end
 
-  def route(%Conn{} = conn , "GET", "/makingdevs/" <> id ) do
+  def route(%Conn{method: "GET", path: "/makingdevs/" <> id} = conn) do
     params = conn.params |> Map.put("id", id)
     Traefik.DeveloperController.show(conn, params)
   end
 
-  def route(%Conn{} = conn, "GET", "/about") do
+  def route(%Conn{method: "GET", path: "/about"} = conn) do
     @pages_path
     |> Path.join("about.html")
     |> File.read()
     |> handle_file(conn)
   end
 
-  def route(%Conn{} = conn, "POST", "/developers") do
+  def route(%Conn{method: "POST", path: "/developers"} = conn) do
     Traefik.DeveloperController.create(conn, conn.params)
   end
 
-  def route(%Conn{} = conn, _, path  ) do
+  def route(%Conn{method: _, path: path} = conn) do
     %Conn{conn | status: 404, response: "No #{path} found"}
   end
 
@@ -112,7 +108,7 @@ defmodule Traefik.Handler do
 end
 
 request_1 = """
-GET /hello HTTP/1.1
+GET /developers HTTP/1.1
 Host: makingdevs.com
 User-Agent: Mybrowser/0.1
 Accept: */*
@@ -122,7 +118,7 @@ Accept: */*
 IO.puts(Traefik.Handler.handle(request_1))
 
 request_2 = """
-GET /developers HTTP/1.1
+GET /projects HTTP/1.1
 Host: makingdevs.com
 User-Agent: Mybrowser/0.1
 Accept: */*
@@ -132,7 +128,7 @@ IO.puts(Traefik.Handler.handle(request_2))
 
 
 request_3 = """
-GET /hello/1 HTTP/1.1
+GET /developers/1 HTTP/1.1
 Host: makingdevs.com
 User-Agent: Mybrowser/0.1
 Accept: */*

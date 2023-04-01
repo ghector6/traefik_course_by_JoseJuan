@@ -12,6 +12,10 @@ defmodule Traefik.DeveloperController do
   end
 
   def show(%Conn{} = conn, %{"id" => id} =  _params) do
-    %Conn{conn | status: 200, response: "ONE DEVELOPER"}
+    response =
+      Organization.get_developer(id)
+      |> Developer.format_developer_header()
+
+    %Conn{conn | status: 200, response: response}
   end
 end

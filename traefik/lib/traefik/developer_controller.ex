@@ -19,11 +19,8 @@ defmodule Traefik.DeveloperController do
 
   end
 
-  def create(%Conn{} = conn, params) do
-    response = """
-    Created dev:
-    #{params["name"]} - #{params["last_name"]} - #{params["email"]}
-    """
+  def create(%Conn{} = conn, %{"name" => name, "lastname"  => last_name, "email" => email}) do
+    response = "  Created dev: #{name} - #{last_name} - #{email}"
     %Conn{conn | status: 201, response: response}
   end
 

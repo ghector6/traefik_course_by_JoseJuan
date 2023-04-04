@@ -35,6 +35,16 @@ defmodule Traefik.Parser do
 
   def parse_headers([], headers), do: headers
 
+  @doc """
+  Parse a list of string headers into a map, in the form of ["Foo: Bar", "Date: 01/01/01"]
+  then transforms into a map with those keys and values
+  ## Example
+      iex> headers_string = ["Foo: Bar", "Date: 01/01/01"]
+      iex> Traefik.Parser.parse_headers(headers_string, %{})
+      %{"Foo" => "Bar", "Date" => "01/01/01"}
+      iex> Traefik.Parser.parse_headers([], %{})
+      %{}
+  """
   def parse_headers([headers_string | rest], headers) do
     [key_header, value_header] = String.split(headers_string, ": ")
     headers  = Map.put(headers, key_header, value_header)

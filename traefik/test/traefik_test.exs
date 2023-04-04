@@ -3,6 +3,6 @@ defmodule TraefikTest do
   doctest Traefik
 
   test "greets the world" do
-    assert Traefik.hello() == :world
+    assert Traefik.hello("Hector") == "Hello, Hector"
   end
 end

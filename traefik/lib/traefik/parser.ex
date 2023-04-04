@@ -20,6 +20,17 @@ defmodule Traefik.Parser do
     }
   end
 
+    @doc """
+  Given a params in string on the form 'key1=value1&key2=value2', transforms
+  those params into a map
+  ## Examples
+      iex> params_string = "foo=bar&zoo=boo&coo=hoo"
+      iex> Traefik.Parser.parse_params_string(params_string)
+      %{"foo" => "bar", "zoo" => "boo", "coo" => "hoo"}
+      iex> Traefik.Parser.parse_params_string("")
+      %{}
+  """
+
   def parse_params_string(params_string), do: String.trim(params_string) |> URI.decode_query()
 
   def parse_headers([], headers), do: headers

@@ -20,11 +20,13 @@ defmodule Traefik.Parser do
     }
   end
 
-    def parse_headers([], headers), do: headers
+  def parse_params_string(params_string), do: String.trim(params_string) |> URI.decode_query()
 
-    def parse_headers([headers_string | rest], headers) do
-      [key_header, value_header] = String.split(headers_string, ": ")
-      headers  = Map.put(headers, key_header, value_header)
-      parse_headers(rest, headers )
-    end
+  def parse_headers([], headers), do: headers
+
+  def parse_headers([headers_string | rest], headers) do
+    [key_header, value_header] = String.split(headers_string, ": ")
+    headers  = Map.put(headers, key_header, value_header)
+    parse_headers(rest, headers )
+  end
 end

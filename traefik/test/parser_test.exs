@@ -9,6 +9,12 @@ defmodule Traefik.ParserTest do
     assert headers == %{"Foo" => "Bar", "Date" => "01/01/01"}
   end
 
+  test "parse paramsn string into map " do
+    params_string = "foo=bar&zoo=boo&coo=hoo"
+    params = Parser.parse_params_string(params_string)
+    assert params = %{"foo" => "bar", "zoo" => "boo", "coo" => "hoo"}
+  end
+
 
 
 

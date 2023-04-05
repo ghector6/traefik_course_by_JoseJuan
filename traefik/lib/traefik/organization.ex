@@ -10,7 +10,6 @@ defmodule Traefik.Organization do
     |> Kernel.tl()
     |> Enum.map(&String.split(&1, ","))
     |> Enum.map(&Traefik.Developer.dev_from_list/1)
-
   end
 
   def get_developer(id) when is_binary(id) do
@@ -21,5 +20,4 @@ defmodule Traefik.Organization do
     list_developers()
     |> Enum.find(fn dev -> dev.id == id end)
   end
-
 end

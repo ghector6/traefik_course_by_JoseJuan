@@ -14,13 +14,11 @@ defmodule Traefik.Conn do
     %{
       200 => "OK",
       201 => "Created",
-      401 => "Unauthorized",
+      401 => "Unathorized",
       403 => "Forbidden",
-      404 => "Not Found",
+      404 => "Not found",
       500 => "Internal Server Error"
     }
-    |> Map.get(code, "Not Found")
+    |> Map.get(code, "Not found")
   end
-
-
 end

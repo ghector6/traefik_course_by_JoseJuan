@@ -1,5 +1,4 @@
 defmodule Traefik.Developer do
-
   defstruct id: 0, first_name: "", last_name: "", email: "", gender: "", ip_address: ""
 
   def dev_from_list([id, first_name, last_name, email, gender, ip_address]) do
@@ -17,16 +16,14 @@ defmodule Traefik.Developer do
     gender != "Female" && gender != "Male"
   end
 
-  def sort_by_last_name(%__MODULE__{last_name: ln1}, %__MODULE__{last_name: ln2} ) do
+  def sort_by_last_name(%__MODULE__{last_name: ln1}, %__MODULE__{last_name: ln2}) do
     ln1 < ln2
   end
 
   def format_developer_item(%__MODULE__{} = developer) do
-    "<li>#{developer.id} #{developer.first_name} #{developer.last_name} #{developer.gender}</li>\n"
+    "<li>#{developer.id} #{developer.first_name} #{developer.last_name} #{developer.gender}<li>\n"
   end
 
-
-  def extra_salary(%__MODULE__{gender: g}) when g != "Male" and g !="Female", do: true
-  def extra_salary(_), do: true
-
+  def extra_salary(%__MODULE__{gender: g}) when g != "Male" and g != "Female", do: true
+  def extra_salary(_), do: false
 end

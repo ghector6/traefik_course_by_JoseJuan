@@ -13,14 +13,15 @@ defmodule Traefik.DeveloperController do
     render(conn, "index.eex", developers: developers)
   end
 
-  def show(%Conn{} = conn, %{"id" => id} =  _params) do
-    developer  = Organization.get_developer(id)
-    render(conn, "show.eex", developer: developer)
+  def show(%Conn{} = conn, %{"id" => id} = _params) do
+    developer = Organization.get_developer(id)
 
+    render(conn, "show.eex", developer: developer)
   end
 
-  def create(%Conn{} = conn, %{"name" => name, "lastname"  => last_name, "email" => email}) do
-    response = "  Created dev: #{name} - #{last_name} - #{email}"
+  def create(%Conn{} = conn, %{"name" => name, "lastname" => lastname, "email" => email}) do
+    response = "Created dev: #{name} - #{lastname} - #{email}"
+
     %Conn{conn | status: 201, response: response}
   end
 
@@ -32,6 +33,4 @@ defmodule Traefik.DeveloperController do
 
     %Conn{conn | status: 200, response: content}
   end
-
-
 end

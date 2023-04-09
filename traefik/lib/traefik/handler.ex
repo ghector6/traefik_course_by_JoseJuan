@@ -6,7 +6,7 @@ defmodule Traefik.Handler do
   @pages_path Path.expand("../../pages", __DIR__)
 
   import Traefik.Parser, only: [parse: 1]
-  import Traefik.Plugs, only: [rewrite_path: 1, track: 1]
+  import Traefik.Plugs, only: [rewrite_path: 1, track: 1, log: 1]
 
   alias Traefik.Conn
 
@@ -15,7 +15,7 @@ defmodule Traefik.Handler do
     request
     |> parse()
     |> rewrite_path()
-    # |> log()
+    |> log()
     |> route()
     |> track()
     |> format_response()

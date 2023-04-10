@@ -7,12 +7,14 @@ defmodule Traefik.Plugs do
 
   def rewrite_path(%Conn{} = conn), do: conn
 
-  def track(%Conn{status: 404, path: path} = conn) do
-     IO.puts("Warn 💀 #{path} not found!")
-    conn
+  def track(%Conn{status: 404} = conn) do
+    track(conn, Mix.env())
   end
 
   def track(%Conn{} = conn), do: conn
+
+
+
 
   def log(%Conn{} = conn) do
     log(conn, Mix.env())
@@ -20,4 +22,12 @@ defmodule Traefik.Plugs do
 
   def log(%Conn{} = conn, :dev), do: IO.inspect(conn, label: "LOG")
   def log(%Conn{} = conn, _ ), do: conn
+
+  def track(%Conn{}= conn, :test), do: conn
+
+  def track(%Conn{path: path} = conn, _) do
+    IO.puts("Warn 💀 #{path} not found!")
+    conn
+  end
+
 end

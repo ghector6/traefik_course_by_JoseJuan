@@ -13,21 +13,17 @@ defmodule Traefik.Plugs do
 
   def track(%Conn{} = conn), do: conn
 
-
-
-
   def log(%Conn{} = conn) do
     log(conn, Mix.env())
   end
 
   def log(%Conn{} = conn, :dev), do: IO.inspect(conn, label: "LOG")
-  def log(%Conn{} = conn, _ ), do: conn
+  def log(%Conn{} = conn, _), do: conn
 
-  def track(%Conn{}= conn, :test), do: conn
+  def track(%Conn{} = conn, :test), do: conn
 
   def track(%Conn{path: path} = conn, _) do
     IO.puts("Warn 💀 #{path} not found!")
     conn
   end
-
 end
